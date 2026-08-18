@@ -16,7 +16,7 @@ const {
 
 const { syncMedicines } = require("../services/syncService");
 
-const Verification = require("../models/Verification");
+const Verification = require("../models/verification")
 
 const verifyMedicineByCode = async (req, res) => {
     try {
