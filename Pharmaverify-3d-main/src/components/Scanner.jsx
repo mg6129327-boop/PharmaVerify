@@ -82,7 +82,7 @@ export default function Scanner({ setResult, refreshHistory }) {
           (item) =>
             item.batchNumber &&
             item.batchNumber.toLowerCase() ===
-              searchValue.toLowerCase()
+            searchValue.toLowerCase()
         );
 
         if (matchedMedicine) {
@@ -291,68 +291,67 @@ export default function Scanner({ setResult, refreshHistory }) {
   // ================= START CAMERA =================
 
   const startCamera = async () => {
-  try {
-    setQrMessage("Starting camera...");
-    isProcessingRef.current = false;
+    try {
+      setQrMessage("Starting camera...");
+      isProcessingRef.current = false;
 
-    const scanner = new Html5Qrcode("camera-reader");
+      const scanner = new Html5Qrcode("camera-reader");
 
-    html5QrCodeRef.current = scanner;
+      html5QrCodeRef.current = scanner;
 
-    isScanningRef.current = true;
-    setCameraActive(true);
+      isScanningRef.current = true;
+      setCameraActive(true);
 
-    await scanner.start(
-      {
-        facingMode: "environment",
-      },
-
-      {
-        fps: 10,
-
-        qrbox: {
-          width: 280,
-          height: 280,
+      await scanner.start(
+        {
+          facingMode: "environment",
         },
-      },
 
-      async (decodedText) => {
-        if (!isScanningRef.current) return;
+        {
+          fps: 10,
 
-        await handleScannedQR(decodedText);
-      },
+          qrbox: {
+            width: 280,
+            height: 280,
+          },
+        },
 
-      () => {
-        // QR detect nahi hua abhi
+        async (decodedText) => {
+          if (!isScanningRef.current) return;
+
+          await handleScannedQR(decodedText);
+        },
+
+        () => {
+          // QR detect nahi hua abhi
+        }
+      );
+
+      setQrMessage(
+        "Camera started. Hold the QR code inside the scanning box."
+      );
+    } catch (error) {
+      console.error("Camera error:", error);
+
+      isScanningRef.current = false;
+      setCameraActive(false);
+
+      if (html5QrCodeRef.current) {
+        try {
+          await html5QrCodeRef.current.clear();
+        } catch (clearError) {
+          console.log(clearError);
+        }
+
+        html5QrCodeRef.current = null;
       }
-    );
 
-    setQrMessage(
-      "Camera started. Hold the QR code inside the scanning box."
-    );
-  } catch (error) {
-    console.error("Camera error:", error);
-
-    isScanningRef.current = false;
-    setCameraActive(false);
-
-    if (html5QrCodeRef.current) {
-      try {
-        await html5QrCodeRef.current.clear();
-      } catch (clearError) {
-        console.log(clearError);
-      }
-
-      html5QrCodeRef.current = null;
+      setQrMessage(
+        `Unable to access camera: ${error.message || "Unknown camera error"
+        }`
+      );
     }
-
-    setQrMessage(
-      `Unable to access camera: ${
-        error.message || "Unknown camera error"
-      }`
-    );
-  }
-};
+  };
 
   // ================= STOP CAMERA =================
 
