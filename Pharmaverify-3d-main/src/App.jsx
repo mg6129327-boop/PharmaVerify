@@ -8,6 +8,8 @@ import Scanner from "./components/Scanner";
 import Result from "./pages/Result";
 import Footer from "./components/Footer";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
@@ -15,7 +17,7 @@ function App() {
   const fetchHistory = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/medicine/history"
+        `${API_URL}/api/medicine/history`
       );
 
       const data = await response.json();
