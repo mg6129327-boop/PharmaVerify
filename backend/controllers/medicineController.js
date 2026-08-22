@@ -413,6 +413,74 @@ const addMedicine = async (
 };
 
 /* ===============================
+UPDATE MEDICINE BY GTIN OR BATCH NUMBER
+(used to fix/overwrite a wrongly-added
+local record without needing its _id)
+================================ */
+
+const updateMedicineByGTIN = async (
+    req,
+    res
+) => {
+    try {
+        const { gtin, batchNumber } =
+            req.body;
+
+        if (!gtin && !batchNumber) {
+            return res.status(400).json({
+                success: false,
+
+                message:
+                    "gtin or batchNumber is required to find the record to update",
+            });
+        }
+
+        const query = gtin
+            ? { gtin }
+            : { batchNumber };
+
+        const medicine =
+            await Medicine.findOneAndUpdate(
+                query,
+                req.body,
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+
+        if (!medicine) {
+            return res.status(404).json({
+                success: false,
+
+                message:
+                    "No matching medicine found to update",
+            });
+        }
+
+        res.json({
+            success: true,
+
+            message:
+                "Medicine updated successfully",
+
+            medicine,
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+
+            message:
+                "Could not update medicine",
+
+            error:
+                error.message,
+        });
+    }
+};
+
+/* ===============================
 SEARCH MEDICINE BY NAME
 ================================ */
 
@@ -815,6 +883,8 @@ module.exports = {
     syncMedicineDatabase,
 
     addMedicine,
+
+    updateMedicineByGTIN,
 
     searchMedicine,
 

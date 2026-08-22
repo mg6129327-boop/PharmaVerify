@@ -421,9 +421,17 @@ export default function Scanner({ setResult, refreshHistory }) {
       format
     ).toUpperCase();
 
+    // FIX: zxing's getBarcodeFormat().toString() returns the numeric
+    // enum value (e.g. "11") instead of the name "QR_CODE" in some
+    // versions, so the old string-only check never matched real QR
+    // scans and sent them to verify-barcode instead of verify-qr.
+    // "11" = BarcodeFormat.QR_CODE in @zxing/library's enum.
+    // As a second safety net, QR payloads here are URLs, so a URL
+    // string is also treated as QR.
     const isQR =
       normalizedFormat.includes("QR_CODE") ||
-      normalizedFormat.includes("QR");
+      normalizedFormat === "11" ||
+      /^https?:\/\//i.test(scannedData);
 
     if (isQR) {
       setQrMessage(
@@ -1011,4 +1019,3 @@ export default function Scanner({ setResult, refreshHistory }) {
     </section>
   );
 }
-

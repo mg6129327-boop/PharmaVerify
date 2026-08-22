@@ -8,6 +8,7 @@ const {
   getAllMedicines,
   syncMedicineDatabase,
   addMedicine,
+  updateMedicineByGTIN,
   searchMedicine,
   getVerificationHistory,
   deleteVerification,
@@ -63,5 +64,8 @@ router.get(
 router.get("/", getAllMedicines);
 
 router.post("/", addMedicine);
+
+// UPDATE MEDICINE (by gtin or batchNumber in body)
+router.patch("/", updateMedicineByGTIN);
 
 module.exports = router;
