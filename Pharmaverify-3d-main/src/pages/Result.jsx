@@ -102,7 +102,8 @@ function Result({ result }) {
               <span>Batch Verified</span>
 
               <b>
-                {result.checks.batchVerified
+                {result.checks.barcodeVerified ??
+                result.checks.batchVerified
                   ? "✓ Yes"
                   : "✗ No"}
               </b>
