@@ -1,66 +1,67 @@
-
 const express = require("express");
 
 const {
-    verifyMedicine,
-    verifyMedicineByCode,
-    verifyQRMedicine,
-    getAllMedicines,
-    addMedicine,
-    searchMedicine,
-    getVerificationHistory,
-    deleteVerification,
-    clearVerificationHistory,
-    syncMedicineDatabase,
+  verifyMedicine,
+  verifyMedicineByCode,
+  verifyBarcodeMedicine,
+  verifyQRMedicine,
+  getAllMedicines,
+  syncMedicineDatabase,
+  addMedicine,
+  searchMedicine,
+  getVerificationHistory,
+  deleteVerification,
+  clearVerificationHistory,
 } = require("../controllers/medicineController");
 
 const router = express.Router();
 
-/* SYNC */
-
+// SYNC
 router.post("/sync", syncMedicineDatabase);
 
-/* SEARCH */
-
+// SEARCH
 router.get("/search", searchMedicine);
 
-/* VERIFICATION HISTORY */
-
+// VERIFICATION HISTORY
 router.get("/history", getVerificationHistory);
 
 router.delete(
-    "/history/:id",
-    deleteVerification
+  "/history/:id",
+  deleteVerification
 );
 
 router.delete(
-    "/history",
-    clearVerificationHistory
+  "/history",
+  clearVerificationHistory
 );
 
-/* QR VERIFICATION */
-
+// BARCODE VERIFICATION
 router.post(
-    "/verify-qr",
-    verifyQRMedicine
+  "/verify-barcode",
+  verifyBarcodeMedicine
 );
 
-/* NORMAL VERIFICATION */
+// QR VERIFICATION
+router.post(
+  "/verify-qr",
+  verifyQRMedicine
+);
 
-router.post("/verify", verifyMedicine);
+// NORMAL VERIFICATION
+router.post(
+  "/verify",
+  verifyMedicine
+);
 
-/* BATCH NUMBER VERIFICATION */
-
+// BATCH NUMBER VERIFICATION
 router.get(
-    "/verify/:code",
-    verifyMedicineByCode
+  "/verify/:code",
+  verifyMedicineByCode
 );
 
-/* MEDICINES */
-
+// MEDICINES
 router.get("/", getAllMedicines);
 
 router.post("/", addMedicine);
 
 module.exports = router;
-

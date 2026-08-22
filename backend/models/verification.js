@@ -4,9 +4,10 @@ const verificationSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ["QR", "MANUAL"],
+      enum: ["QR", "BARCODE", "MANUAL"],
       required: true,
     },
+
 
     medicineName: {
       type: String,
@@ -28,6 +29,14 @@ const verificationSchema = new mongoose.Schema(
       type: String,
     },
 
+    barcode: {
+      type: String,
+    },
+
+    source: {
+      type: String,
+    },
+
     verificationStatus: {
       type: String,
       required: true,
@@ -45,6 +54,8 @@ const verificationSchema = new mongoose.Schema(
   {
     timestamps: true,
   }
+
+
 );
 
 module.exports = mongoose.model(
